@@ -135,3 +135,26 @@ equals.addEventListener('click',()=>{
     currentInput.value = calculate();
     historical.innerText +=' =';
 })
+//percentage
+percentage.addEventListener('click',()=>{
+    if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
+        currentInput.value = calculate() / 100;
+        historical.innerText +=' =';
+})
+//reset
+reset.addEventListener('click', ()=>{
+buttonOperationIsPressed = false;
+defaultLengthHistorical = undefined;
+stringCalcul = '';
+answer = '';
+currentInput.value ='';
+historical.innerText ='';
+})
+//clear
+clear.addEventListener('click', ()=>{
+    currentInput.value = currentInput.value.slice(0, -1);
+})
+//change Sign current input
+changeSign.addEventListener('click', ()=>{
+    currentInput.value = parseFloat(currentInput.value) * -1;
+})
