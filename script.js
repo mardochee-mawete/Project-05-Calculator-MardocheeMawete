@@ -77,13 +77,12 @@ document.addEventListener('keydown', (event) => {
 });
 // historical calcul string
 function displayStringCalcul(operator) {
-    if(historical.innerText.includes('=') == true){  historical.innerText = historical.innerText.split('=').join('');}
     if (historical.innerText == '') {
         historical.innerText = currentInput.value + operator;
         buttonOperationIsPressed = true; // button operator is pressed
         defaultLengthHistorical = historical.innerText.length; // get length historical
     }
-    else if (buttonOperationIsPressed == true) {  //control sign
+    else if (buttonOperationIsPressed == true || historical.innerText.includes('=') == true) {  //control sign
         if (historical.innerText.slice(-2) != operator) {
             historical.innerText = historical.innerText.slice(0, -2) + operator;
         }
@@ -140,7 +139,6 @@ percentage.addEventListener('click',()=>{
     if(historical.innerText !=''){
         if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
         if(calculate() == 'ERROR'){ currentInput.value = calculate(); }
-        
         else{ currentInput.value = calculate() / 100;}  
         historical.innerText +=' =';
     }
