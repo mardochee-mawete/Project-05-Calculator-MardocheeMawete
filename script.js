@@ -45,7 +45,7 @@ function displayCurrentInput(buttonInput) {
         }
     }
 }
-//display dynamique historique
+//display dynamic string calcul
 function dynamicHistorical(){
     if(historical.innerText !=''){
         historical.innerText = historical.innerText.slice(0, defaultLengthHistorical) +' '+currentInput.value;
@@ -122,7 +122,6 @@ function calculate(){
             if(char == '÷'){ stringCalcul = stringCalcul.split('÷').join('/') ; }
             else if( char == '×'){ stringCalcul = stringCalcul.split('×').join('*') ;}
         }
-        if(isNaN(stringCalcul.slice(-1)) == true){ stringCalcul = stringCalcul.slice(0, -1); } // if the last char is not a number
         answer = eval(stringCalcul)
         if(answer == Infinity){ return 'ERROR'; }
         else{ return answer;}   
@@ -130,15 +129,20 @@ function calculate(){
 }
 //equals
 equals.addEventListener('click',()=>{
-    if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
-    currentInput.value = calculate();
-    historical.innerText +=' =';
+    if(historical.innerText !=''){
+        if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
+        currentInput.value = calculate();
+        historical.innerText +=' =';
+    }
 })
 //percentage
 percentage.addEventListener('click',()=>{
-    if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
-        currentInput.value = calculate() / 100;
+    if(historical.innerText !=''){
+        if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
+        if(calculate() == 'ERROR'){ currentInput.value = calculate(); }
+        else{ currentInput.value = calculate() / 100; }  
         historical.innerText +=' =';
+    }
 })
 //reset
 reset.addEventListener('click', ()=>{
@@ -152,8 +156,10 @@ historical.innerText ='';
 //clear
 clear.addEventListener('click', ()=>{
     currentInput.value = currentInput.value.slice(0, -1);
+    dynamicHistorical();
 })
 //change Sign current input
 changeSign.addEventListener('click', ()=>{
     currentInput.value = parseFloat(currentInput.value) * -1;
+    dynamicHistorical();
 })
