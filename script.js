@@ -121,11 +121,10 @@ function calculate(){
         for(let char of stringCalcul){
             if(char == '÷'){ stringCalcul = stringCalcul.split('÷').join('/') ; }
             else if( char == '×'){ stringCalcul = stringCalcul.split('×').join('*') ;}
-            else if( char == ' '){ stringCalcul = stringCalcul.split(' ').join('') ;}
         }
         if(isNaN(stringCalcul.slice(-1)) == true){ stringCalcul = stringCalcul.slice(0, -1); } // if the last char is not a number
         answer = eval(stringCalcul)
-        if(answer == 'Infinity'){ return 'ERROR'; }
+        if(answer == Infinity){ return 'ERROR'; }
         else{ return answer;}   
     }
 }
