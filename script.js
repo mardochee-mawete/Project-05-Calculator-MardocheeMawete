@@ -123,7 +123,7 @@ function calculate(){
             else if( char == '×'){ stringCalcul = stringCalcul.split('×').join('*') ;}
         }
         answer = eval(stringCalcul)
-        if(answer == Infinity){ return 'ERROR'; }
+        if(answer == Infinity || answer == -Infinity){ return 'ERROR'; }
         else{ return answer;}   
     }
 }
@@ -140,7 +140,8 @@ percentage.addEventListener('click',()=>{
     if(historical.innerText !=''){
         if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
         if(calculate() == 'ERROR'){ currentInput.value = calculate(); }
-        else{ currentInput.value = calculate() / 100; }  
+        
+        else{ currentInput.value = calculate() / 100;}  
         historical.innerText +=' =';
     }
 })
