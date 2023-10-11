@@ -3,7 +3,6 @@ const currentInput = document.getElementById('input');
 currentInput.setAttribute('readonly', 'readonly');
 currentInput.placeholder = '0';
 const historical = document.getElementById('calcul');
-const numpadButton = document.querySelectorAll('.numpad');
 const groupOperateur = document.querySelectorAll('[type="submit"]');
 const reset = document.getElementById('reset');
 const clear = document.getElementById('clear');
@@ -11,154 +10,216 @@ const changeSign = document.getElementById('plusoumoins');
 const percentage = document.getElementById('percentage');
 const equals = document.getElementById('equals');
 
-let buttonOperationIsPressed = false;
-let defaultLengthHistorical = undefined;
+let lengthStringCalcul = undefined;
 let stringCalcul = '';
+let lastInput = '';
+let lastSign='';
 let answer = '';
+let buttonChangeSingIsPressed = false;
 
-//display current input
-function displayCurrentInput(buttonInput) {
-    if (buttonOperationIsPressed == true || historical.innerText.includes('=') == true) {
-        currentInput.value = buttonInput;
-        dynamicHistorical();
-        buttonOperationIsPressed = false;
-    }
-    else if (buttonInput == '0') {
-        if (currentInput.value != '0') {
-            currentInput.value += buttonInput;
-            dynamicHistorical();
-        }
-    }
-    else if (buttonInput == '.') {
-        if (currentInput.value.includes('.') == false) {
-            currentInput.value += buttonInput;
-            dynamicHistorical();
-        }
-    } else {
-        if (currentInput.value == '0' && buttonInput != '.') {
-            currentInput.value = buttonInput;
-            dynamicHistorical();
-        }
-        else {
-            currentInput.value += buttonInput;
-            dynamicHistorical();
-        }
-    }
-}
-//display dynamic string calcul
-function dynamicHistorical(){
-    if(historical.innerText !=''){
-        historical.innerText = historical.innerText.slice(0, defaultLengthHistorical) +' '+currentInput.value;
-    }
-}
+//create button 00
+const containerButtons = document.querySelector('.buttons');
+const divButton = document.createElement('div');
+const buttonDoubleZero = document.createElement('button');
+buttonDoubleZero.type='button';
+buttonDoubleZero.className = 'numpad';
+buttonDoubleZero.textContent = '00';
+divButton.appendChild(buttonDoubleZero);
+containerButtons.insertBefore(divButton, containerButtons.children[17]);
+
 // numpd Buttons calculator
-numpadButton.forEach((bt) => {
-    bt.addEventListener('click', (e) => {
-        displayCurrentInput(e.target.textContent);
-    })
+document.querySelectorAll('.numpad').forEach((bt) => {
+  bt.addEventListener('click', (e) => {
+    displayCurrentInput(e.target.textContent);
+  })
 })
 //keyboard button input
 document.addEventListener('keydown', (event) => {
-    let buttonKeyboard = event.key;
-    if (buttonKeyboard == '.') {
-        displayCurrentInput(buttonKeyboard);
-    } else if ((buttonKeyboard == '+' || buttonKeyboard == '-') || (buttonKeyboard == '/' || buttonKeyboard == '*')) {
-        if(buttonKeyboard == '/'){ displayStringCalcul(' ÷ '); }
-        else if(buttonKeyboard == '*'){ displayStringCalcul(' × '); }
-        else{ displayStringCalcul(' '+buttonKeyboard+' '); }  
-    }
-    else {
-        for (let i = 0; i <= 9; i++) {
-            if (buttonKeyboard == i) {
-                displayCurrentInput(buttonKeyboard);
-            }
-        }
-    }
+  let key = event.key;
+  if (/[0-9.+-/*//]/.test(key)) {
+    key.replace("*", ' × ').replace("/", ' ÷ ');
+    if (/[0-9.]/.test(key)) displayCurrentInput(key);
+    else displayStringCalcul(key);
+  }
 });
-// historical calcul string
-function displayStringCalcul(operator) {
-    if (historical.innerText == '') {
-        historical.innerText = currentInput.value + operator;
-        buttonOperationIsPressed = true; // button operator is pressed
-        defaultLengthHistorical = historical.innerText.length; // get length historical
+//display current input
+function displayCurrentInput(buttonInput) {
+  if (isNaN(historical.innerText.slice(-1)) == true && historical.innerText.slice(-1) != '.') {
+    currentInput.value = buttonInput;
+    dynamicStringCalcul();
+  }
+  else if (buttonInput == '0') {
+    if (currentInput.value != '0' && currentInput.value != '-0') {
+      currentInput.value += buttonInput;
+      dynamicStringCalcul();
     }
-    else if (buttonOperationIsPressed == true || historical.innerText.includes('=') == true) {  //control sign
-        if (historical.innerText.slice(-2) != operator) {
-            historical.innerText = historical.innerText.slice(0, -2) + operator;
-        }
+  }
+  else if (buttonInput == '00') {
+    if ((currentInput.value != '' && currentInput.value != '-') && (currentInput.value != '0' && currentInput.value != '-0')) {
+      currentInput.value += buttonInput;
+      dynamicStringCalcul();
+    }
+  } 
+  else if (buttonInput == '.') {
+    if (currentInput.value.includes('.') == false && currentInput.value != '') {
+      currentInput.value += buttonInput;
+      dynamicStringCalcul();
+    }
+  }
+  else {
+    if (currentInput.value == '0' && buttonInput != '.') {
+      currentInput.value = buttonInput;
+      dynamicStringCalcul();
     }
     else {
-        historical.innerText += ' '+ operator+' ';
-        buttonOperationIsPressed = true; // button operator is pressed
-        defaultLengthHistorical = historical.innerText.length; // get length historical
+      currentInput.value += buttonInput;
+      dynamicStringCalcul();
     }
+  }
 }
 // buttons operators
-groupOperateur.forEach(function (operator) {
-    operator.type = 'button';
-    operator.addEventListener('click', () => {
-        if (currentInput.value != '') { // if current input is empty, no input 
-            if (operator.innerText == '÷') {
-                displayStringCalcul(' ÷ ');
-            }
-            else if (operator.innerText == '-') {
-                displayStringCalcul(' - ');
-            }
-            else if (operator.innerText == '×') {
-                displayStringCalcul(' × ');
-            }
-            else if (operator.innerText == '+') {
-                displayStringCalcul(' + ');
-            }
-        }
-    })
-})
-//calcul
-function calculate(){
-    stringCalcul = historical.innerText; // get string calcul
-    if(stringCalcul !=''){
-        for(let char of stringCalcul){
-            if(char == '÷'){ stringCalcul = stringCalcul.split('÷').join('/') ; }
-            else if( char == '×'){ stringCalcul = stringCalcul.split('×').join('*') ;}
-        }
-        answer = eval(stringCalcul)
-        if(answer == Infinity || answer == -Infinity){ return 'ERROR'; }
-        else{ return answer;}   
+groupOperateur.forEach(function(operator) {
+  operator.type = 'button';
+  operator.addEventListener('click', () => {
+    if (operator.innerText == '÷') {
+      displayStringCalcul(' ÷ ');
     }
+    else if (operator.innerText == '-') {
+      displayStringCalcul(' - ');
+    }
+    else if (operator.innerText == '×') {
+      displayStringCalcul(' × ');
+    }
+    else if (operator.innerText == '+') {
+      displayStringCalcul(' + ');
+    }
+  })
+})
+// display calcul string
+function displayStringCalcul(operator) {
+  if (historical.innerText.slice(-1) == '=') {
+    historical.innerText = currentInput.value; // set final answer
+    currentInput.value = '';
+  }
+  if (historical.innerText == '') { // first calcul
+    if (operator == ' - ' && currentInput.value == '') {
+      currentInput.value = '-';
+    } else if (isNaN(currentInput.value) == false) {
+      historical.innerText = currentInput.value + operator;
+      currentInput.value = '';
+      lengthStringCalcul = historical.innerText.length; // get length historical
+      lastSign = operator;
+    }
+  }
+  else if (isNaN(historical.innerText.slice(-1)) == true) {  //control sign
+    historical.innerText = historical.innerText.slice(0, -1) + operator;
+    lengthStringCalcul = historical.innerText.length; // get length historical
+    lastSign = operator;
+  }
+  else {
+    historical.innerText += operator;
+    lengthStringCalcul = historical.innerText.length; // get length historical
+    lastSign = operator;
+  }
+}
+//display dynamic string calcul
+function dynamicStringCalcul() {
+  if (historical.innerText != '') {
+    historical.innerText = historical.innerText.slice(0, lengthStringCalcul) + ' ' + currentInput.value;
+  }
+}
+//calcul
+function calculate() {
+  stringCalcul = historical.innerText; // get string calcul
+  if (stringCalcul != '') {
+    for (let char of stringCalcul) {
+      if (char == '÷') { stringCalcul = stringCalcul.split('÷').join('/'); }
+      else if (char == '×') { stringCalcul = stringCalcul.split('×').join('*'); }
+    }
+    answer = eval(stringCalcul)
+    if (answer == Infinity || answer == -Infinity) { return 'Erreur'; }
+    else { return answer; }
+  }
 }
 //equals
-equals.addEventListener('click',()=>{
-    if(historical.innerText !=''){
-        if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
-        currentInput.value = calculate();
-        historical.innerText +=' =';
+equals.addEventListener('click', () => {
+  if (historical.innerText != '') {
+    if (isNaN(historical.innerText.slice(-1)) == false) {
+      lastInput = currentInput.value;
+      currentInput.value = calculate();
+      historical.innerText += ' =';
     }
+    else if(historical.innerText.includes('=') == true){
+      historical.innerText = currentInput.value + lastSign + lastInput;
+      currentInput.value = calculate();
+      historical.innerText += ' =';
+    }
+    else {
+      if (isNaN(parseFloat(currentInput.value)) == false) {
+          if (buttonChangeSingIsPressed == true) { // if button +/- was pressed => (evaluation)
+              historical.innerText += ' ' + currentInput.value;
+              buttonChangeSingIsPressed = false;
+          } 
+          else {
+              historical.innerText = historical.innerText.slice(0, -1);
+          }
+          lastInput = currentInput.value;
+          currentInput.value = calculate();
+          historical.innerText += ' =';
+      }
+    }
+  }
 })
 //percentage
-percentage.addEventListener('click',()=>{
-    if(historical.innerText !=''){
-        if(isNaN(historical.innerText.slice(-1)) == true){ historical.innerText = historical.innerText.slice(0, -1); }
-        if(calculate() == 'ERROR'){ currentInput.value = calculate(); }
-        else{ currentInput.value = calculate() / 100;}  
-        historical.innerText +=' =';
+percentage.addEventListener('click', () => {
+  if (historical.innerText != '') {
+    if (isNaN(historical.innerText.slice(-1)) == true) {
+      if (historical.innerText.slice(-1) == '=') { // after button = is pressi
+        historical.innerText = historical.innerText.slice(0, -1);
+        currentInput.value = calculate() / 100;
+        historical.innerText = '';
+      }
     }
+    else {
+      currentInput.value = calculate() / 100;
+      historical.innerText = '';
+    }
+  } else {
+    if (currentInput.value != '') {
+      currentInput.value = parseFloat(currentInput.value) / 100;
+    }
+  }
 })
 //reset
-reset.addEventListener('click', ()=>{
-buttonOperationIsPressed = false;
-defaultLengthHistorical = undefined;
-stringCalcul = '';
-answer = '';
-currentInput.value ='';
-historical.innerText ='';
+reset.addEventListener('click', () => {
+  lengthStringCalcul = undefined;
+  stringCalcul = '';
+  answer = '';
+  lastInput = '';
+  lastSign='';
+  currentInput.value = '';
+  historical.innerText = '';
+  buttonChangeSingIsPressed = false;
 })
 //clear
-clear.addEventListener('click', ()=>{
-    currentInput.value = currentInput.value.slice(0, -1);
-    dynamicHistorical();
+clear.addEventListener('click', () => {
+  currentInput.value = '';
+  dynamicStringCalcul();
 })
 //change Sign current input
-changeSign.addEventListener('click', ()=>{
+changeSign.addEventListener('click', () => {
+  if (isNaN(parseFloat(currentInput.value)) == false) {
     currentInput.value = parseFloat(currentInput.value) * -1;
-    dynamicHistorical();
+    if (isNaN(historical.innerText.slice(-1)) == false && buttonChangeSingIsPressed == false) {
+      for (let lastChar of historical.innerText) {
+        if (isNaN(historical.innerText.slice(-1)) == false) { // delete all numpad
+          historical.innerText = historical.innerText.slice(0, -1);
+        }
+      }
+    }
+    else if (buttonChangeSingIsPressed == false) {
+      historical.innerText = '';
+    }
+    buttonChangeSingIsPressed = true;
+  }
 })
