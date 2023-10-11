@@ -42,7 +42,14 @@ function setCalculInHistorical(){
   stringHistorical.style.fontSize = '16px';
   stringHistorical.style.marginBottom = '10px';
   stringHistorical.style.color="#333";
+  stringHistorical.style.cursor = 'pointer';
   containerHistorical.appendChild(stringHistorical);
+  //cover a past calculation
+  stringHistorical.addEventListener('click',(e) => {
+    let indexSignEquals = e.target.textContent.indexOf('=');
+    stringCalcul.innerText = e.target.textContent.slice(0 , indexSignEquals + 1);
+    currentInput.value = e.target.textContent.slice(indexSignEquals + 1);
+  })
 }
 // numpd Buttons calculator
 document.querySelectorAll('.numpad').forEach((bt) => {
