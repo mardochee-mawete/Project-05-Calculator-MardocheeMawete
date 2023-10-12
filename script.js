@@ -34,6 +34,14 @@ buttonPI.className = 'numpad';
 buttonPI.textContent = 'π';
 divButtonPI.appendChild(buttonPI);
 containerButtons.insertBefore(divButtonPI, containerButtons.children[21]);
+//create button e
+const divButton_e = document.createElement('div');
+const button_e = document.createElement('button');
+button_e.type='button';
+button_e.className = 'numpad';
+button_e.textContent = 'e';
+divButton_e.appendChild(button_e);
+containerButtons.insertBefore(divButton_e, containerButtons.children[22]);
 
 //create container historical
 const containerHistorical = document.createElement('div');
@@ -101,6 +109,12 @@ function displayCurrentInput(buttonInput) {
   else if(buttonInput == 'π'){
     if(currentInput.value =='' || currentInput.value =='-'){ currentInput.value += '3.14'; }
     else if(isNaN(parseFloat(currentInput.value))==false){ currentInput.value =  parseFloat(currentInput.value) * 3.14 ; }
+    dynamicStringCalcul();
+  }
+  else if(buttonInput == 'e'){
+    if(currentInput.value =='' || currentInput.value =='-'){ currentInput.value += '2.71'; }
+    else if(isNaN(parseFloat(currentInput.value))==false){ currentInput.value =  parseFloat(currentInput.value) * 2.71 ; }
+    dynamicStringCalcul();
   }
   else {
     if (currentInput.value == '0' && buttonInput != '.') {
