@@ -19,13 +19,21 @@ let buttonChangeSingIsPressed = false;
 
 //create button 00
 const containerButtons = document.querySelector('.buttons');
-const divButton = document.createElement('div');
+const divButtonDouble = document.createElement('div');
 const buttonDoubleZero = document.createElement('button');
 buttonDoubleZero.type='button';
 buttonDoubleZero.className = 'numpad';
 buttonDoubleZero.textContent = '00';
-divButton.appendChild(buttonDoubleZero);
-containerButtons.insertBefore(divButton, containerButtons.children[17]);
+divButtonDouble.appendChild(buttonDoubleZero);
+containerButtons.insertBefore(divButtonDouble, containerButtons.children[17]);
+//create button PI
+const divButtonPI = document.createElement('div');
+const buttonPI = document.createElement('button');
+buttonPI.type='button';
+buttonPI.className = 'numpad';
+buttonPI.textContent = 'π';
+divButtonPI.appendChild(buttonPI);
+containerButtons.insertBefore(divButtonPI, containerButtons.children[21]);
 
 //create container historical
 const containerHistorical = document.createElement('div');
@@ -89,6 +97,10 @@ function displayCurrentInput(buttonInput) {
       currentInput.value += buttonInput;
       dynamicStringCalcul();
     }
+  }
+  else if(buttonInput == 'π'){
+    if(currentInput.value =='' || currentInput.value =='-'){ currentInput.value += '3.14'; }
+    else if(isNaN(parseFloat(currentInput.value))==false){ currentInput.value =  parseFloat(currentInput.value) * 3.14 ; }
   }
   else {
     if (currentInput.value == '0' && buttonInput != '.') {
