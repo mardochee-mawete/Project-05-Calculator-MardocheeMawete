@@ -17,32 +17,25 @@ let lastSign='';
 let answer = '';
 let buttonChangeSingIsPressed = false;
 
-//create button 00
+//create buttons
 const containerButtons = document.querySelector('.buttons');
-const divButtonDouble = document.createElement('div');
-const buttonDoubleZero = document.createElement('button');
-buttonDoubleZero.type='button';
-buttonDoubleZero.className = 'numpad';
-buttonDoubleZero.textContent = '00';
-divButtonDouble.appendChild(buttonDoubleZero);
-containerButtons.insertBefore(divButtonDouble, containerButtons.children[17]);
-//create button PI
-const divButtonPI = document.createElement('div');
-const buttonPI = document.createElement('button');
-buttonPI.type='button';
-buttonPI.className = 'numpad';
-buttonPI.textContent = 'π';
-divButtonPI.appendChild(buttonPI);
-containerButtons.insertBefore(divButtonPI, containerButtons.children[21]);
-//create button e
-const divButton_e = document.createElement('div');
-const button_e = document.createElement('button');
-button_e.type='button';
-button_e.className = 'numpad';
-button_e.textContent = 'e';
-divButton_e.appendChild(button_e);
-containerButtons.insertBefore(divButton_e, containerButtons.children[22]);
-
+function createButtons(text, index){
+  const divButton = document.createElement('div');
+  const button = document.createElement('button');
+  button.className = 'numpad';
+  button.type='button';
+  button.textContent = text;
+  divButton.appendChild(button);
+  containerButtons.insertBefore(divButton, containerButtons.children[index]);
+}
+createButtons('π','4');
+createButtons('e','4');
+createButtons('exp','4');
+createButtons('log','4');
+createButtons('ln','4');
+createButtons('sin','4');
+createButtons('cos','4');
+createButtons('00','24');
 //create container historical
 const containerHistorical = document.createElement('div');
 containerHistorical.style.width = '20%';
@@ -54,7 +47,7 @@ document.querySelector('body').appendChild(containerHistorical);
 //set calcul in historical
 function setCalculInHistorical(){
   const stringHistorical = document.createElement('p');
-  stringHistorical.textContent = stringCalcul.textContent +' '+ currentInput.value;
+  stringHistorical.textContent = stringCalcul.innerText +' '+ currentInput.value;
   stringHistorical.style.fontSize = '16px';
   stringHistorical.style.marginBottom = '10px';
   stringHistorical.style.color="#333";
@@ -63,7 +56,7 @@ function setCalculInHistorical(){
   //cover a past calculation
   stringHistorical.addEventListener('click',(e) => {
     let indexSignEquals = e.target.textContent.indexOf('=');
-    stringCalcul.textContent = e.target.textContent.slice(0 , indexSignEquals + 1);
+    stringCalcul.innerText = e.target.textContent.slice(0 , indexSignEquals + 1);
     currentInput.value = e.target.textContent.slice(indexSignEquals + 1);
   })
 }
@@ -84,7 +77,7 @@ document.addEventListener('keydown', (event) => {
 });
 //display current input
 function displayCurrentInput(buttonInput) {
-  if (isNaN(stringCalcul.textContent.slice(-1)) == true && (stringCalcul.textContent.slice(-1) != '.' && buttonInput !='00')) {
+  if (isNaN(stringCalcul.innerText.slice(-1)) == true && (stringCalcul.innerText.slice(-1) != '.' && buttonInput !='00')) {
     currentInput.value = buttonInput;
     dynamicStringCalcul();
   }
@@ -107,13 +100,11 @@ function displayCurrentInput(buttonInput) {
     }
   }
   else if(buttonInput == 'π'){
-    if(currentInput.value =='' || currentInput.value =='-'){ currentInput.value += '3.14'; }
-    else if(isNaN(parseFloat(currentInput.value))==false){ currentInput.value =  parseFloat(currentInput.value) * 3.14 ; }
+    currentInput.value = '3.14';
     dynamicStringCalcul();
   }
   else if(buttonInput == 'e'){
-    if(currentInput.value =='' || currentInput.value =='-'){ currentInput.value += '2.71'; }
-    else if(isNaN(parseFloat(currentInput.value))==false){ currentInput.value =  parseFloat(currentInput.value) * 2.71 ; }
+    currentInput.value = '2.71';
     dynamicStringCalcul();
   }
   else {
@@ -147,72 +138,72 @@ groupOperateur.forEach(function(operator) {
 })
 // display calcul string
 function displayStringCalcul(operator) {
-  if (stringCalcul.textContent.slice(-1) == '=') {
-    stringCalcul.textContent = currentInput.value; // set final answer
+  if (stringCalcul.innerText.slice(-1) == '=') {
+    stringCalcul.innerText = currentInput.value; // set final answer
     currentInput.value = '';
   }
-  if (stringCalcul.textContent == '') { // first calcul
+  if (stringCalcul.innerText == '') { // first calcul
     if (operator == ' - ' && currentInput.value == '') {
       currentInput.value = '-';
     } else if (isNaN(currentInput.value) == false) {
-      stringCalcul.textContent = currentInput.value + operator;
+      stringCalcul.innerText = currentInput.value + operator;
       currentInput.value = '';
-      lengthStringCalcul = stringCalcul.textContent.length; // get length historical
+      lengthStringCalcul = stringCalcul.innerText.length; // get length historical
       lastSign = operator;
     }
   }
-  else if (isNaN(stringCalcul.textContent.slice(-1)) == true) {  //control sign
-    stringCalcul.textContent = stringCalcul.textContent.slice(0, -1) + operator;
-    lengthStringCalcul = stringCalcul.textContent.length; // get length historical
+  else if (isNaN(stringCalcul.innerText.slice(-1)) == true) {  //control sign
+    stringCalcul.innerText = stringCalcul.innerText.slice(0, -1) + operator;
+    lengthStringCalcul = stringCalcul.innerText.length; // get length historical
     lastSign = operator;
   }
   else {
-    stringCalcul.textContent += operator;
-    lengthStringCalcul = stringCalcul.textContent.length; // get length historical
+    stringCalcul.innerText += operator;
+    lengthStringCalcul = stringCalcul.innerText.length; // get length historical
     lastSign = operator;
   }
 }
 //display dynamic string calcul
 function dynamicStringCalcul() {
-  if (stringCalcul.textContent != '') {
-    stringCalcul.textContent = stringCalcul.textContent.slice(0, lengthStringCalcul) + ' ' + currentInput.value;
+  if (stringCalcul.innerText != '') {
+    stringCalcul.innerText = stringCalcul.innerText.slice(0, lengthStringCalcul) + ' ' + currentInput.value;
   }
 }
 //calcul
 function calculate() {
-  if (stringCalcul.textContent != '') {
-    answer = eval(stringCalcul.textContent.replace('÷', '/').replace('×', '*'));
+  if (stringCalcul.innerText != '') {
+    answer = eval(stringCalcul.innerText.replace('÷', '/').replace('×', '*'));
     if (answer == Infinity || answer == -Infinity) { return 'Erreur'; }
     else { return answer; }
   }
 }
 //equals
 equals.addEventListener('click', () => {
-  if (stringCalcul.textContent != '') {
-    if (isNaN(stringCalcul.textContent.slice(-1)) == false) {
+  if (stringCalcul.innerText != '') {
+    if (isNaN(stringCalcul.innerText.slice(-1)) == false) {
       lastInput = currentInput.value;
       currentInput.value = calculate();
-      stringCalcul.textContent += ' =';
+      stringCalcul.innerText += ' =';
       setCalculInHistorical();
     }
-    else if(stringCalcul.textContent.includes('=') == true){
-      stringCalcul.textContent = currentInput.value + lastSign + lastInput;
+    else if(stringCalcul.innerText.includes('=') == true){
+      stringCalcul.innerText = currentInput.value + lastSign + lastInput;
       currentInput.value = calculate();
-      stringCalcul.textContent += ' =';
+      stringCalcul.innerText += ' =';
       setCalculInHistorical();
     }
     else {
       if (isNaN(parseFloat(currentInput.value)) == false) {
           if (buttonChangeSingIsPressed == true) { // if button +/- was pressed => (evaluation)
-              stringCalcul.textContent += ' ' + currentInput.value;
+              stringCalcul.innerText += ' ' + currentInput.value;
               buttonChangeSingIsPressed = false;
           } 
           else {
-              stringCalcul.textContent = stringCalcul.textContent.slice(0, -1);
+              stringCalcul.innerText = stringCalcul.innerText.slice(0, -1);
           }
           lastInput = currentInput.value;
           currentInput.value = calculate();
-          stringCalcul.textContent += ' =';
+          stringCalcul.innerText += ' =';
           setCalculInHistorical();
       }
     }
@@ -220,17 +211,17 @@ equals.addEventListener('click', () => {
 })
 //percentage
 percentage.addEventListener('click', () => {
-  if (stringCalcul.textContent != '') {
-    if (isNaN(stringCalcul.textContent.slice(-1)) == true) {
-      if (stringCalcul.textContent.slice(-1) == '=') { // after button = is pressi
-        stringCalcul.textContent = stringCalcul.textContent.slice(0, -1);
+  if (stringCalcul.innerText != '') {
+    if (isNaN(stringCalcul.innerText.slice(-1)) == true) {
+      if (stringCalcul.innerText.slice(-1) == '=') { // after button = is pressi
+        stringCalcul.innerText = stringCalcul.innerText.slice(0, -1);
         currentInput.value = calculate() / 100;
-        stringCalcul.textContent = '';
+        stringCalcul.innerText = '';
       }
     }
     else {
       currentInput.value = calculate() / 100;
-      stringCalcul.textContent = '';
+      stringCalcul.innerText = '';
     }
   } else {
     if (currentInput.value != '') {
@@ -245,7 +236,7 @@ reset.addEventListener('click', () => {
   lastInput = '';
   lastSign='';
   currentInput.value = '';
-  stringCalcul.textContent = '';
+  stringCalcul.innerText = '';
   buttonChangeSingIsPressed = false;
 })
 //clear
@@ -257,15 +248,15 @@ clear.addEventListener('click', () => {
 changeSign.addEventListener('click', () => {
   if (isNaN(parseFloat(currentInput.value)) == false) {
     currentInput.value = parseFloat(currentInput.value) * -1;
-    if (isNaN(stringCalcul.textContent.slice(-1)) == false && buttonChangeSingIsPressed == false) {
-      for (let lastChar of stringCalcul.textContent) {
-        if (isNaN(stringCalcul.textContent.slice(-1)) == false) { // delete all numpad
-          stringCalcul.textContent = stringCalcul.textContent.slice(0, -1);
+    if (isNaN(stringCalcul.innerText.slice(-1)) == false && buttonChangeSingIsPressed == false) {
+      for (let lastChar of stringCalcul.innerText) {
+        if (isNaN(stringCalcul.innerText.slice(-1)) == false) { // delete all numpad
+          stringCalcul.innerText = stringCalcul.innerText.slice(0, -1);
         }
       }
     }
     else if (buttonChangeSingIsPressed == false) {
-      stringCalcul.textContent = '';
+      stringCalcul.innerText = '';
     }
     buttonChangeSingIsPressed = true;
   }
