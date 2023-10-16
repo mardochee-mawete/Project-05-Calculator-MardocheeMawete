@@ -38,12 +38,24 @@ createButtons('cos','4');
 createButtons('00','24');
 //create container historical
 const containerHistorical = document.createElement('div');
-containerHistorical.style.width = '20%';
+containerHistorical.style.width = '22%';
 containerHistorical.style.position = 'absolute';
 containerHistorical.style.top = '0';
 containerHistorical.style.right = '0';
-containerHistorical.style.padding = '20px 10px 0 0';
+containerHistorical.style.padding = '40px 10px 0 0';
 document.querySelector('body').appendChild(containerHistorical);
+//title historical
+const titleHistorical = document.createElement('h2');
+titleHistorical.textContent = "Aucun Historique pour l'instant";
+titleHistorical.style.fontSize = '18px';
+titleHistorical.style.marginBottom='20px';
+containerHistorical.appendChild(titleHistorical);
+
+function changeTextTitleHistorical(){
+  if(containerHistorical.children[1]){
+    titleHistorical.textContent = "Historique";
+  }
+}
 //set calcul in historical
 function setCalculInHistorical(){
   const stringHistorical = document.createElement('p');
@@ -58,6 +70,16 @@ function setCalculInHistorical(){
     let indexSignEquals = e.target.textContent.indexOf('=');
     stringCalcul.innerText = e.target.textContent.slice(0 , indexSignEquals + 1);
     currentInput.value = e.target.textContent.slice(indexSignEquals + 1);
+    e.target.style.color = '#ff0000';
+    e.target.style.textDecoration ='underline';
+  })
+  stringHistorical.addEventListener('mouseover',(e) => {
+    e.target.style.color = '#0000ff';
+    e.target.style.textDecoration ='underline';
+  })
+  stringHistorical.addEventListener('mouseleave',(e) => {
+    e.target.style.color = '#333';
+    e.target.style.textDecoration ='none';
   })
 }
 // numpd Buttons calculator
@@ -208,12 +230,14 @@ equals.addEventListener('click', () => {
       currentInput.value = calculate();
       stringCalcul.innerText += ' =';
       setCalculInHistorical();
+      changeTextTitleHistorical()
     }
     else if(stringCalcul.innerText.includes('=') == true){
       stringCalcul.innerText = currentInput.value + lastSign + lastInput;
       currentInput.value = calculate();
       stringCalcul.innerText += ' =';
       setCalculInHistorical();
+      changeTextTitleHistorical()
     }
     else {
       if (isNaN(parseFloat(currentInput.value)) == false) {
@@ -228,6 +252,7 @@ equals.addEventListener('click', () => {
           currentInput.value = calculate();
           stringCalcul.innerText += ' =';
           setCalculInHistorical();
+          changeTextTitleHistorical()
       }
     }
   }
