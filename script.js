@@ -100,12 +100,31 @@ function displayCurrentInput(buttonInput) {
     }
   }
   else if(buttonInput == 'π'){
-    currentInput.value = '3.14';
+    currentInput.value = Math.PI;
     dynamicStringCalcul();
   }
   else if(buttonInput == 'e'){
-    currentInput.value = '2.71';
+    currentInput.value = Math.E;
     dynamicStringCalcul();
+  }
+  else if((buttonInput =='cos'|| buttonInput =='sin') || ((buttonInput =='log'|| buttonInput =='ln' )|| buttonInput =='exp')){
+    if(isNaN(currentInput.value)==false && currentInput.value !=''){
+     if(buttonInput =='cos'){
+      currentInput.value = Math.cos(currentInput.value);
+     }
+     else if(buttonInput =='sin'){
+      currentInput.value = Math.sin(currentInput.value);
+     }
+     else if(buttonInput =='log'){
+      currentInput.value = Math.log10(currentInput.value);
+     }
+     else if(buttonInput =='exp'){
+      currentInput.value = Math.exp(currentInput.value);
+     }
+     else if(buttonInput =='ln'){
+      currentInput.value = Math.log(currentInput.value);
+     }
+    }
   }
   else {
     if (currentInput.value == '0' && buttonInput != '.') {
