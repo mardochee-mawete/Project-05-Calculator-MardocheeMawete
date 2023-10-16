@@ -77,11 +77,10 @@ document.addEventListener('keydown', (event) => {
 });
 //display current input
 function displayCurrentInput(buttonInput) {
-  if (isNaN(stringCalcul.innerText.slice(-1)) == true && (stringCalcul.innerText.slice(-1) != '.' && buttonInput !='00')) {
-    currentInput.value = buttonInput;
-    dynamicStringCalcul();
+  if ((isNaN(stringCalcul.innerText.slice(-1)) == true && stringCalcul.innerText.slice(-1) != '.')) {
+      currentInput.value ='';
   }
-  else if (buttonInput == '0') {
+  if (buttonInput == '0') {
     if (currentInput.value != '0' && currentInput.value != '-0') {
       currentInput.value += buttonInput;
       dynamicStringCalcul();
@@ -94,9 +93,14 @@ function displayCurrentInput(buttonInput) {
     }
   } 
   else if (buttonInput == '.') {
-    if (currentInput.value.includes('.') == false && currentInput.value != '') {
-      currentInput.value += buttonInput;
-      dynamicStringCalcul();
+    if (currentInput.value.includes('.') == false) {
+      if(currentInput.value == ''){
+        currentInput.value = '0.';
+        dynamicStringCalcul();
+      }else{
+        currentInput.value += buttonInput;
+        dynamicStringCalcul();
+      }
     }
   }
   else if(buttonInput == 'π'){
