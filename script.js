@@ -84,7 +84,7 @@ containerHistorical.style.padding = '40px 10px 0 0';
 document.querySelector('body').appendChild(containerHistorical);
 //title historical
 const titleHistorical = document.createElement('h2');
-titleHistorical.textContent = "Aucun Historique pour l'instant";
+titleHistorical.textContent = "Aucun historique pour l'instant";
 titleHistorical.style.fontSize = '18px';
 titleHistorical.style.marginBottom='20px';
 containerHistorical.appendChild(titleHistorical);
