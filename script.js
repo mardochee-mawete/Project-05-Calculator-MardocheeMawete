@@ -17,25 +17,63 @@ let lastSign='';
 let answer = '';
 let buttonChangeSingIsPressed = false;
 
-//create buttons
+//choose units (deg , rad, grad)
+const angleUnit = document.createElement('span');
+angleUnit.textContent = 'Deg';
+angleUnit.style.color='#f3f3f3';
+angleUnit.style.backgroundColor = 'rgba(0,0,0,0.3)';
+angleUnit.style.padding = '8px 0';
+angleUnit.style.width = '50px';
+angleUnit.style.textAlign = 'center';
+angleUnit.style.borderRadius = '10px';
+angleUnit.style.marginBottom = '-20px';
+angleUnit.style.cursor='pointer';
+document.querySelector('form').insertBefore(angleUnit, document.querySelector('form').children[0]);
+
+angleUnit.addEventListener('click', (e)=>{
+  if(e.target.textContent == 'Deg'){ angleUnit.textContent = 'Rad';}
+  else if(angleUnit.textContent == 'Rad'){ angleUnit.textContent = 'Grad';}
+  else if(angleUnit.textContent == 'Grad'){ angleUnit.textContent = 'Deg';}
+})
+//create the function and constant buttons
 const containerButtons = document.querySelector('.buttons');
-function createButtons(text, index){
-  const divButton = document.createElement('div');
+const divButton = document.createElement('div');
+divButton.style.gridColumn = '1/4';
+divButton.style.gridRow = '2/3';
+divButton.style.display ='grid';
+divButton.style.alignItems = 'center';
+divButton.style.gridTemplateColumns = 'repeat(7, 1fr)';
+divButton.style.gap = '3px';
+containerButtons.insertBefore(divButton, containerButtons.children[4]);
+
+function createFunctionAndConstantButton(text){
   const button = document.createElement('button');
   button.className = 'numpad';
   button.type='button';
+  button.style.fontSize = '14px';
+  button.style.borderRadius = '10px';
+  button.style.height = '43px'
+  button.style.color = '#444';
+  button.style.fontWeight = 'bold';
+  button.style.backgroundColor = '#97ecba';
   button.textContent = text;
   divButton.appendChild(button);
-  containerButtons.insertBefore(divButton, containerButtons.children[index]);
 }
-createButtons('π','4');
-createButtons('e','4');
-createButtons('exp','4');
-createButtons('log','4');
-createButtons('ln','4');
-createButtons('sin','4');
-createButtons('cos','4');
-createButtons('00','24');
+createFunctionAndConstantButton('π');
+createFunctionAndConstantButton('e');
+createFunctionAndConstantButton('exp');
+createFunctionAndConstantButton('log');
+createFunctionAndConstantButton('ln');
+createFunctionAndConstantButton('sin');
+createFunctionAndConstantButton('cos');
+// create button 00
+const divButtonDoubleZero = document.createElement('div');
+const buttonDoubleZero = document.createElement('button');
+buttonDoubleZero.className = 'numpad';
+buttonDoubleZero.type='button';
+buttonDoubleZero.textContent = '00';
+divButtonDoubleZero.appendChild(buttonDoubleZero);
+containerButtons.insertBefore(divButtonDoubleZero, containerButtons.children[19]);
 //create container historical
 const containerHistorical = document.createElement('div');
 containerHistorical.style.width = '22%';
