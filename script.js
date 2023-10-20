@@ -71,8 +71,9 @@ angleUnit.addEventListener('click', (e)=>{
 
 // unit conversion
 function unitConversion(){
-  if(angleUnit.textContent == 'Deg'){ return parseFloat(currentInput.value) * (Math.PI / 180);}
-  else if(angleUnit.textContent == 'Grad'){ return (parseFloat(currentInput.value) * (Math.PI / 180)) / 1.1111}
+  let degree = parseFloat(currentInput.value) * (Math.PI / 180);
+  if(angleUnit.textContent == 'Deg'){ return degree; }
+  else if(angleUnit.textContent == 'Grad'){ return degree / 1.1111; }
   else{ return currentInput.value;}
 }
 
